@@ -24,6 +24,7 @@ A Streamlit app that compares a project's **cost of equity, cost of debt and WAC
   and **CSV downloads**.
 - **Method & assumptions** tab and a **Verification checks** tab that tests the three required properties live, plus a
   step-by-step calculation printout for checking by hand.
+- **Dark, low-effort layout:** inputs in three numbered steps (Project → Assumptions → Market data, where every fetched value shows its source, date and a Live/Manual/Auto badge next to its override switch), big side-by-side USD and local-currency result cards with a one-line summary, and detail tabs.
 - **Defaults on open:** Software (System & Application), United States, U.S. tax rate, 6.5% ERP, 30% debt.
 
 ## Formulas
