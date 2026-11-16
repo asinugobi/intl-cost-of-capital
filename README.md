@@ -60,8 +60,8 @@ The additive option uses `k_e,FC = k_e,USD + (r_FC − r_US)` and `s_FC = s`.
   leaves USD results unchanged.
 - `verification_example.xlsx` re-computes the Germany example with plain Excel formulas for an independent check.
 
-Worked example (defaults, data of 2026-11-16, Germany selected): β_U = 1.2254, t = 25.53%, r_US = 5.14%, r_DE = 3.38%,
-s = 1.11% → β_L = 1.6165, k_e USD = 15.65%, WACC USD = 12.35%, k_e EUR = 13.71%, WACC EUR = 10.60%.
+Worked example (defaults, live data of 2026-11-16, Germany selected): β_U = 1.2254, t = 25.53%, r_US = 5.13%, r_DE = 3.38%,
+s = 1.11% → β_L = 1.6165, k_e USD = 15.64%, WACC USD = 12.34%, k_e EUR = 13.71%, WACC EUR = 10.60%.
 
 ## Run locally
 
