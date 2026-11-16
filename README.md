@@ -3,7 +3,7 @@
 A Streamlit app that compares a project's **cost of equity, cost of debt and WACC in USD** and in the
 **currency of a selected country**, using live data from Damodaran, the OECD and Trading Economics.
 
-**Live app:** _add your Streamlit Cloud link here_
+**Live app:** https://intl-cost-of-capital-proto.streamlit.app/
 **Repository:** https://github.com/asinugobi/intl-cost-of-capital
 
 ## Features
