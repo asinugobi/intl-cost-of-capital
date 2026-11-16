@@ -438,13 +438,21 @@ def run_app() -> None:  # noqa: C901 - UI function is long by nature
 
     # Foreign BBB spread: override or auto
     auto_spread_pct = 100 * auto_fc_spread(spread_us_pct / 100, rf_us_pct / 100, rf_fc_pct / 100, method)
-    sp_on = sb.toggle(f"Override {ccy} BBB spread (%)", key="ov_spread_fc")
+    if method == "multiplicative":
+        spread_rule = (f"{spread_us_pct:.2f}% × (1 + {rf_fc_pct:.2f}%) / (1 + {rf_us_pct:.2f}%) "
+                       f"= **{auto_spread_pct:.4f}%**")
+    else:
+        spread_rule = f"USD spread (additive method) = **{auto_spread_pct:.4f}%**"
+    sp_on = sb.toggle(f"Override {ccy} BBB spread (%)", key="ov_spread_fc",
+                      help="Off: the USD BBB spread is translated into the foreign currency through the "
+                           "10Y yield differential, so equal yields give an identical spread.")
     if sp_on:
         spread_fc_override = sb.number_input(f"{ccy} BBB spread (%)", value=round(auto_spread_pct, 4),
                                              step=0.01, format="%.4f", key="val_spread_fc") / 100
+        sb.caption(f"↳ manual value in use · auto would be {spread_rule}")
     else:
         spread_fc_override = None
-        sb.caption(f"↳ auto-calculated: **{auto_spread_pct:.4f}%**")
+        sb.caption(f"↳ auto: {spread_rule}")
 
     project_tax_pct = tax_us_pct if tax_choice == "U.S." else tax_fc_pct
 
@@ -488,6 +496,24 @@ def run_app() -> None:  # noqa: C901 - UI function is long by nature
                    "After-tax cost of debt", "Equity weight E/V", "Debt weight D/V", "WACC"],
         )
         st.dataframe(table, width="stretch")
+        with st.expander(f"How the {ccy} BBB spread is set", expanded=False):
+            st.markdown(
+                f"""
+**Auto (default):** the USD pre-tax cost of debt is translated into {ccy} with the same parity factor used for
+equity, then the {ccy} risk-free rate is subtracted. Algebraically this scales the USD spread:
+
+`s_FC = s_USD × (1 + r_FC) / (1 + r_US)` → {spread_rule}
+
+Why scale rather than copy the USD spread unchanged? Copying would make the {ccy} cost of debt inconsistent with the
+{ccy} cost of equity (which *is* translated by the parity factor). With scaling, debt and equity are converted the same
+way, and equal 10Y yields reproduce the USD spread exactly.
+
+**Override:** switch on *Override {ccy} BBB spread* in the sidebar to enter a market-quoted local spread. This only
+changes the {ccy} cost of debt and WACC — USD results are untouched (see the Verification checks tab).
+
+Currently in use: **{res['spread_fc']:.4%}** ({'manual override' if res['spread_fc_overridden'] else 'auto'}).
+"""
+            )
 
         export = pd.DataFrame([{
             "Industry": industry, "Country": country, "Currency": ccy, "Conversion method": method,
